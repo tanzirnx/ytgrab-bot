@@ -1,0 +1,26 @@
+# ═══════════════════════════════════════════════════════════
+# YTGrab Bot - Render.com Configuration
+# Bot: @YTGrabDownBot
+# ═══════════════════════════════════════════════════════════
+
+services:
+  - type: web
+    name: ytgrab-bot
+    runtime: docker
+    plan: free
+    region: oregon          # Change to closest: oregon, ohio, frankfurt, singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health
+    envVars:
+      - key: BOT_TOKEN
+        sync: false         # You'll set this manually in dashboard
+      - key: ADMIN_ID
+        sync: false
+      - key: TEMP_DIR
+        value: /tmp/ytgrab
+      - key: DB_PATH
+        value: /tmp/ytgrab/ytgrab.db
+      - key: LOG_FILE
+        value: /tmp/ytgrab/bot.log
+      - key: LOG_LEVEL
+        value: INFO
