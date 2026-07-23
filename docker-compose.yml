@@ -1,0 +1,51 @@
+# ═══════════════════════════════════════════════════════════
+# YTGrab Bot - Docker Compose
+# Bot: @YTGrabDownBot
+# ═══════════════════════════════════════════════════════════
+
+version: "3.8"
+
+services:
+  ytgrab-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ytgrab-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - bot-data:/app/data
+      - bot-logs:/app/logs
+      - bot-temp:/tmp/ytgrab
+    environment:
+      - TEMP_DIR=/tmp/ytgrab
+      - DB_PATH=/app/data/ytgrab.db
+      - LOG_FILE=/app/logs/bot.log
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: "2.0"
+        reservations:
+          memory: 256M
+          cpus: "0.5"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  bot-data:
+    driver: local
+  bot-logs:
+    driver: local
+  bot-temp:
+    driver: local
