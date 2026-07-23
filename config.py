@@ -1,5 +1,5 @@
 """
-YTGrab Bot - Configuration Module
+YTGrab Bot - Configuration Module (Phase 2)
 Bot: @YTGrabDownBot
 """
 
@@ -7,7 +7,6 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 
@@ -19,6 +18,8 @@ class Config:
     BOT_USERNAME: str = os.getenv("BOT_USERNAME", "YTGrabDownBot")
     BOT_NAME: str = os.getenv("BOT_NAME", "YTGrab Bot")
     ADMIN_ID: int = int(os.getenv("ADMIN_ID", "0"))
+    SUPPORT_GROUP: str = os.getenv("SUPPORT_GROUP", "https://t.me/YTGrabDownBot")
+    CHANNEL_URL: str = os.getenv("CHANNEL_URL", "https://t.me/YTGrabDownBot")
 
     # ─── Paths ──────────────────────────────────────────────
     BASE_DIR: Path = Path(__file__).parent
@@ -37,22 +38,26 @@ class Config:
     MAX_QUEUE_SIZE: int = int(os.getenv("MAX_QUEUE_SIZE", "10"))
     MAX_CONCURRENT_DOWNLOADS: int = int(os.getenv("MAX_CONCURRENT_DOWNLOADS", "3"))
     CLEANUP_INTERVAL_MIN: int = int(os.getenv("CLEANUP_INTERVAL_MIN", "30"))
+    MAX_BATCH_URLS: int = int(os.getenv("MAX_BATCH_URLS", "10"))
 
     # ─── Rate Limiting ──────────────────────────────────────
     RATE_LIMIT_PER_MINUTE: int = int(os.getenv("RATE_LIMIT_PER_MINUTE", "10"))
     RATE_LIMIT_PER_HOUR: int = int(os.getenv("RATE_LIMIT_PER_HOUR", "50"))
     RATE_LIMIT_PER_DAY: int = int(os.getenv("RATE_LIMIT_PER_DAY", "100"))
 
-    # ─── Local API (for large files) ───────────────────────
+    # ─── Local API ──────────────────────────────────────────
     USE_LOCAL_API: bool = os.getenv("USE_LOCAL_API", "false").lower() == "true"
     LOCAL_API_URL: str = os.getenv("LOCAL_API_URL", "http://localhost:8081")
 
     # ─── Logging ────────────────────────────────────────────
     LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
 
+    # ─── Maintenance ────────────────────────────────────────
+    MAINTENANCE_MODE: bool = False  # Toggled at runtime via /maintenance
+
     # ─── Telegram API Limits ────────────────────────────────
-    TELEGRAM_MAX_FILE_SIZE: int = 50 * 1024 * 1024  # 50MB
-    TELEGRAM_MAX_FILE_SIZE_LOCAL: int = 2000 * 1024 * 1024  # 2GB
+    TELEGRAM_MAX_FILE_SIZE: int = 50 * 1024 * 1024
+    TELEGRAM_MAX_FILE_SIZE_LOCAL: int = 2000 * 1024 * 1024
     TELEGRAM_MAX_MESSAGE_LENGTH: int = 4096
 
     # ─── Supported Formats ──────────────────────────────────
@@ -60,6 +65,13 @@ class Config:
     VIDEO_FORMATS: list = ["mp4", "webm", "mkv", "avi"]
     AUDIO_BITRATES: list = [64, 128, 192, 256, 320]
     VIDEO_RESOLUTIONS: list = [144, 240, 360, 480, 720, 1080, 1440, 2160]
+    SUBTITLE_FORMATS: list = ["srt", "vtt", "ass", "json3"]
+    THUMBNAIL_FORMATS: list = ["jpg", "png", "webp"]
+
+    # ─── GIF Settings ───────────────────────────────────────
+    MAX_GIF_DURATION: int = 30  # seconds
+    GIF_WIDTH: int = 480
+    GIF_FPS: int = 15
 
     # ─── yt-dlp Settings ────────────────────────────────────
     YTDLP_OPTIONS: dict = {
@@ -76,26 +88,20 @@ class Config:
 
     @classmethod
     def initialize_dirs(cls):
-        """Create necessary directories."""
         dirs = [
-            cls.TEMP_DIR,
-            cls.DOWNLOADS_DIR,
-            cls.PROCESSING_DIR,
-            cls.DATA_DIR,
-            cls.LOGS_DIR,
+            cls.TEMP_DIR, cls.DOWNLOADS_DIR, cls.PROCESSING_DIR,
+            cls.DATA_DIR, cls.LOGS_DIR,
         ]
         for d in dirs:
             d.mkdir(parents=True, exist_ok=True)
 
     @classmethod
     def validate(cls) -> bool:
-        """Validate required configuration."""
         if not cls.BOT_TOKEN:
-            raise ValueError("❌ BOT_TOKEN is not set! Get one from @BotFather")
+            raise ValueError("❌ BOT_TOKEN is not set!")
         if not cls.ADMIN_ID:
-            raise ValueError("❌ ADMIN_ID is not set! Get yours from @userinfobot")
+            raise ValueError("❌ ADMIN_ID is not set!")
         return True
 
 
-# Initialize directories on import
 Config.initialize_dirs()
