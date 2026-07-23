@@ -1,0 +1,45 @@
+# ═══════════════════════════════════════════════════════════
+# YTGrab Bot - Systemd Service
+# Install: sudo cp deploy/ytgrab.service /etc/systemd/system/
+# ═══════════════════════════════════════════════════════════
+
+[Unit]
+Description=YTGrab Telegram Bot (@YTGrabDownBot)
+Documentation=https://github.com/yourusername/ytgrab-bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/ytgrab-bot
+ExecStart=/home/ubuntu/ytgrab-bot/venv/bin/python bot.py
+ExecReload=/bin/kill -HUP $MAINPID
+Restart=always
+RestartSec=10
+StartLimitInterval=60
+StartLimitBurst=5
+
+# Environment
+Environment=PYTHONUNBUFFERED=1
+EnvironmentFile=/home/ubuntu/ytgrab-bot/.env
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/tmp/ytgrab /home/ubuntu/ytgrab-bot/logs /home/ubuntu/ytgrab-bot/data
+PrivateTmp=false
+
+# Resource limits
+MemoryMax=1G
+CPUQuota=200%
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=ytgrab-bot
+
+[Install]
+WantedBy=multi-user.target
