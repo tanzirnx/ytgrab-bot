@@ -18,7 +18,7 @@ aiofiles==24.1.0
 # Metadata Embedding
 mutagen==1.47.0
 
-# Image Processing (thumbnails, GIF)
+# Image Processing
 Pillow==10.4.0
 
 # Logging
@@ -27,9 +27,12 @@ loguru==0.7.2
 # URL Validation
 validators==0.34.0
 
-# Scheduling (cleanup, stats)
+# Scheduling
 apscheduler==3.10.4
 
-# GIF creation
+# GIF
 imageio==2.34.0
 imageio-ffmpeg==0.5.1
+
+# Health Check Server (Render)
+flask==3.0.3
