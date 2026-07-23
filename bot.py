@@ -69,6 +69,34 @@ from handlers.utility_handler import (
     report_command, feedback_command, suggest_command,
 )
 
+    # ─── Phase 3: Group Commands ────────────────────────────
+    app.add_handler(CommandHandler("gsettings", gsettings_command))
+    app.add_handler(CommandHandler("gallow", gallow_command))
+    app.add_handler(CommandHandler("gdeny", gdeny_command))
+    app.add_handler(CommandHandler("glimit", glimit_command))
+
+    # ─── Phase 3: Subtitle Commands ─────────────────────────
+    app.add_handler(CommandHandler(["subs", "subtitles"], subs_command))
+    app.add_handler(CommandHandler("subslist", subslist_command))
+    app.add_handler(CommandHandler("subslang", subslang_command))
+
+    # ─── Phase 3: Metadata Commands ─────────────────────────
+    app.add_handler(CommandHandler(["thumb", "thumbnail"], thumb_command))
+    app.add_handler(CommandHandler("metadata", metadata_command))
+    app.add_handler(CommandHandler("description", description_command))
+    app.add_handler(CommandHandler("comments", comments_command))
+
+    # ─── Phase 3: Format & Utility Commands ─────────────────
+    app.add_handler(CommandHandler("format", format_command))
+    app.add_handler(CommandHandler("age", age_command))
+    app.add_handler(CommandHandler("speed", speed_command))
+
+    # ─── Phase 3: Advanced Commands ─────────────────────────
+    app.add_handler(CommandHandler("audiobook", audiobook_command))
+    app.add_handler(CommandHandler("live", live_command))
+    app.add_handler(CommandHandler("chapters", chapters_command))
+    app.add_handler(CommandHandler("sponsorblock", sponsorblock_command))
+
 
 # ─── Logging Setup ──────────────────────────────────────────
 
